@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kleer Day — 26 de enero</title>
+  <style>
+    :root{
+      --panel: rgba(255,255,255,.06);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --faint: rgba(255,255,255,.45);
+      --stroke: rgba(255,255,255,.12);
+      --accent: rgba(255,255,255,.90);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 22px;
+      --max: 1080px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(255,255,255,.10), transparent 60%),
+                  radial-gradient(1000px 700px at 80% 30%, rgba(255,255,255,.07), transparent 60%),
+                  linear-gradient(180deg, #06070a 0%, #0b0d12 55%, #07080b 100%);
+      overflow-x: hidden;
+    }
+
+    main{ scroll-snap-type: y proximity; }
+    section{
+      position: relative;
+      padding: 80px 20px;
+      scroll-snap-align: start;
+    }
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .topbar{
+      position: fixed;
+      left: 0; right: 0; top: 0;
+      z-index: 100;
+      padding: 14px 18px;
+      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,.20);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .topbar .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 650;
+      letter-spacing: .2px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .links{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .links a{
+      color: var(--muted);
+      text-decoration:none;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+    .links a:hover{
+      border-color: var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+    }
+
+    h1{
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.05;
+      margin: 0 0 14px 0;
+      letter-spacing: -0.6px;
+    }
+    h2{
+      font-size: clamp(22px, 3vw, 30px);
+      margin: 0 0 12px 0;
+      letter-spacing: -0.3px;
+    }
+    p{
+      margin: 0 0 12px 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    .lead{
+      font-size: 18px;
+      color: rgba(255,255,255,.78);
+      max-width: 70ch;
+    }
+    .small{
+      font-size: 13px;
+      color: var(--faint);
+    }
+
+    .panel{
+      border: 1px solid var(--stroke);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .panel.soft{ background: rgba(255,255,255,.04); }
+    .grid{ display:grid; gap: 16px; }
+    .grid.two{ grid-template-columns: 1fr; }
+    @media (min-width: 860px){
+      .grid.two{ grid-template-columns: 1fr 1fr; gap: 18px; }
+    }
+
+    .kpi{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .kpi .pill{ background: rgba(255,255,255,.05); }
+
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stagger > *{
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .stagger.is-visible > *{
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stagger.is-visible > *:nth-child(1){ transition-delay: .00s;}
+    .stagger.is-visible > *:nth-child(2){ transition-delay: .08s;}
+    .stagger.is-visible > *:nth-child(3){ transition-delay: .16s;}
+    .stagger.is-visible > *:nth-child(4){ transition-delay: .24s;}
+    .stagger.is-visible > *:nth-child(5){ transition-delay: .32s;}
+    .stagger.is-visible > *:nth-child(6){ transition-delay: .40s;}
+
+    .hero{
+      padding-top: 110px;
+      min-height: 92vh;
+      display:flex;
+      align-items:center;
+    }
+    .hero .panel{ padding: 28px; }
+    .hero .meta{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 14px 0 0 0;
+    }
+    .ctaRow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn:hover{ background: rgba(255,255,255,.12); }
+    .btn.primary{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn.primary:hover{ background: rgba(255,255,255,.18); }
+
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .list li{ margin: 6px 0; }
+
+    footer{ padding: 80px 20px 110px 20px; }
+    .divider{
+      height:1px;
+      background: var(--stroke);
+      margin: 18px 0;
+    }
+
+    .decision{
+      display:grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (min-width: 860px){
+      .decision{ grid-template-columns: 1fr 1fr; }
+    }
+    .decision .card{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 14px 14px;
+    }
+    .decision .card p{ margin: 0; }
+
+    details{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding: 14px 14px;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      cursor: pointer;
+      font-weight: 650;
+      color: rgba(255,255,255,.86);
+      list-style: none;
+      outline: none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details[open]{ background: rgba(255,255,255,.06); }
+    .answer{
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .orb{
+      position:absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: .16;
+      pointer-events: none;
+      background: rgba(255,255,255,.55);
+      mix-blend-mode: overlay;
+    }
+    .orb.one{ top: -120px; left: -120px; }
+    .orb.two{ top: 30%; right: -180px; opacity: .12; width: 520px; height: 520px; }
+    .orb.three{ bottom: -160px; left: 15%; opacity: .10; width: 520px; height: 520px; }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal, .stagger > *{ transition: none !important; transform:none !important; }
+      .reveal{ opacity:1 !important; }
+      .stagger > *{ opacity:1 !important; }
+      main{ scroll-snap-type: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        Kleer Day <span class="pill">Lun 26 de enero</span>
+      </a>
+      <nav class="links" aria-label="Navegación">
+        <a href="#contexto">Contexto</a>
+        <a href="#agenda">Agenda</a>
+        <a href="#ipf">Ronda IPF</a>
+        <a href="#faq">FAQ</a>
+        <a href="#cierre">Cierre</a>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+      <div class="orb one"></div>
+      <div class="wrap">
+        <div class="panel reveal">
+          <h1>El Kleer Day vuelve 🤍</h1>
+          <p class="lead">
+            Un espacio que a muchos nos trae lindos recuerdos. Participación voluntaria (¡y recomendada!).
+            Esta es una primera propuesta de agenda para presentarla y refinarla juntos.
+          </p>
+
+          <div class="meta">
+            <span class="pill">🗓️ Lunes 26 de enero</span>
+            <span class="pill">⏳ 08:00–17:00 Colombia</span>
+            <span class="pill">🔁 Híbrido + presencial</span>
+            <span class="pill">🎥 Se graba</span>
+          </div>
+
+          <div class="decision reveal" style="margin-top:16px;">
+            <div class="card">
+              <p><strong>Si solo podés 3 horas</strong> → sumate a la <strong>parte híbrida</strong> (8–11 COL). Es lo “mínimo valioso” para alinearnos.</p>
+            </div>
+            <div class="card">
+              <p><strong>Si estás en una ciudad con encuentro</strong> → después sumate al <strong>presencial</strong> para conexión y profundidad (hasta 17 COL).</p>
+            </div>
+          </div>
+
+          <div class="ctaRow">
+            <a class="btn primary" href="#agenda">Ver la propuesta →</a>
+            <a class="btn" href="https://meet.google.com/jiq-vbmc-rue" target="_blank" rel="noopener noreferrer">Abrir Meet</a>
+            <button class="btn" id="btn-ics" type="button">Agregar al calendario (.ics)</button>
+          </div>
+
+          <p class="small">Tip: scrollea despacio; las secciones van apareciendo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTEXTO -->
+    <section id="contexto">
+      <div class="orb two"></div>
+      <div class="wrap grid">
+        <div class="panel reveal">
+          <h2>¿Por qué vuelve distinto?</h2>
+          <p>
+            El viejo Kleer Day duraba 8 horas y era 100% presencial. Con el paso del tiempo y la distribución geográfica,
+            dejamos de hacerlo. Hoy tiene sentido recuperarlo con un formato más flexible.
+          </p>
+          <div class="divider"></div>
+          <p>
+            En esta propuesta, el Kleer Day tiene una parte <strong>híbrida</strong> y otra <strong>presencial</strong>.
+            El evento “completo” queda propuesto de <strong>08:00 a 17:00 (Colombia)</strong>.
+          </p>
+          <div class="kpi">
+            <span class="pill">🧭 Norte común</span>
+            <span class="pill">🤝 Trabajo cruzado</span>
+            <span class="pill">🔍 Visibilidad</span>
+            <span class="pill">🧠 Conversación estratégica</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section id="agenda">
+      <div class="wrap grid two">
+        <div class="panel reveal">
+          <h2>💻 Parte híbrida (08:00–11:00 COL)</h2>
+          <p><strong>Horarios de referencia:</strong> 8–11 Colombia / 10–13 Arg-Uy / 14–17 Irlanda-Italia</p>
+          <div class="divider"></div>
+
+          <div class="panel soft stagger" data-stagger>
+            <p class="small">Agenda:</p>
+            <ol class="list">
+              <li>Review del mes que termina</li>
+              <li>Retrospectiva global</li>
+              <li>💡 Ronda de ideas y propuestas frescas (IPF)</li>
+              <li>Planning estratégica</li>
+            </ol>
+            <p class="small" style="margin-top:10px;">Incluye 1 a 3 breaks (descansos). Se graba para quien no pueda asistir.</p>
+          </div>
+        </div>
+
+        <div class="panel reveal">
+          <h2>🎯 Objetivos (híbrida)</h2>
+          <p>
+            Brinda norte común, alineación, y la posibilidad de conocer qué se hizo en cada rincón de Kleer
+            y ofrecer/pedir ayuda.
+          </p>
+          <p>
+            Potencia el trabajo cruzado y la coherencia entre iniciativas. Eleva la conversación desde lo táctico hacia lo estratégico.
+          </p>
+        </div>
+      </div>
+
+      <div class="wrap" style="margin-top:16px;">
+        <div class="panel reveal">
+          <h2>🫂 Parte presencial (11:00–17:00 COL)</h2>
+          <p>
+            Un espacio flexible, definido por cada ciudad o región. Puede incluir 🥐☕️, 🧉 break, 🍴 almuerzo,
+            conversaciones y coworking formal y/o informal.
+          </p>
+          <div class="divider"></div>
+          <p><strong>🎯 Objetivos (presencial)</strong></p>
+          <p>
+            Brinda cercanía y conexión. Permite que el trabajo local se potencie. Y habilita profundidad en temas que en remoto cuestan más.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IPF -->
+    <section id="ipf">
+      <div class="wrap grid">
+        <div class="panel reveal">
+          <h2>💡 Ronda IPF — Ideas y Propuestas Frescas</h2>
+          <p class="lead">
+            Es una idea fresca, no algo que debamos hacer. Un espacio para presentar ideas nuevas aún no desarrolladas,
+            como posibles potenciadores de la estrategia.
+          </p>
+          <div class="divider"></div>
+
+          <div class="grid two stagger" data-stagger>
+            <div class="panel soft">
+              <p><strong>Cómo me la imagino</strong></p>
+              <ul class="list">
+                <li>Ideas en borrador, simples</li>
+                <li>Poco tiempo por idea (cuidar el foco)</li>
+                <li>Si interesa, se retoma durante el mes</li>
+              </ul>
+            </div>
+            <div class="panel soft">
+              <p><strong>Compromiso del que propone</strong></p>
+              <ul class="list">
+                <li>Usar poco tiempo</li>
+                <li>No “vender” la idea: presentarla</li>
+                <li>No implica ejecución obligatoria</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <p><strong>🎯 Objetivo de la ronda</strong></p>
+          <p>
+            Habilita la aparición de ideas para oxigenar y potenciar lo establecido (sin compromiso de ejecución).
+            Cuida la energía creadora sin descuidar el tiempo de quienes ya tienen foco en temas preexistentes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="wrap grid">
+        <div class="panel reveal">
+          <h2>FAQ</h2>
+
+          <details>
+            <summary>¿Es obligatorio?</summary>
+            <div class="answer">
+              No. Es <strong>voluntario</strong> (y recomendado). La idea es que sea un ritual que sume, no una carga.
+              Si solo podés estar una parte, la “mínima valiosa” es la <strong>híbrida</strong>.
+            </div>
+          </details>
+
+          <details>
+            <summary>¿Se graba?</summary>
+            <div class="answer">
+              Sí. Solemos <strong>grabar</strong> el espacio para que quien no pueda asistir lo vea después.
+              Igual, intentamos que la grabación no vuelva la conversación “acartonada”: si aparece un tema sensible,
+              lo explicitamos y elegimos cómo abordarlo.
+            </div>
+          </details>
+
+          <details>
+            <summary>¿Qué pasa si no puedo asistir?</summary>
+            <div class="answer">
+              Nada grave. Podés ver la grabación y/o pedir a alguien que te comparta los <strong>highlights</strong> y decisiones.
+            </div>
+          </details>
+
+          <div class="divider"></div>
+
+          <div class="ctaRow">
+            <a class="btn primary" href="https://meet.google.com/jiq-vbmc-rue" target="_blank" rel="noopener noreferrer">Entrar al Meet</a>
+            <button class="btn" id="btn-ics-2" type="button">Agregar al calendario (.ics)</button>
+            <a class="btn" href="#inicio">Volver arriba ↑</a>
+          </div>
+
+          <p class="small">
+            Link Meet: <span style="color: rgba(255,255,255,.75);">meet.google.com/jiq-vbmc-rue</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CIERRE -->
+    <footer id="cierre">
+      <div class="orb three"></div>
+      <div class="wrap grid">
+        <div class="panel reveal">
+          <h2>Cierre</h2>
+          <p class="lead">
+            Esta es una primera propuesta de agenda. La idea es presentarla, conversarla y refinarla juntos.
+          </p>
+          <div class="divider"></div>
+          <p><strong>Nos vemos el lunes 26 de enero.</strong></p>
+
+          <div class="ctaRow">
+            <a class="btn primary" href="https://meet.google.com/jiq-vbmc-rue" target="_blank" rel="noopener noreferrer">Abrir Meet</a>
+            <button class="btn" id="btn-ics-3" type="button">Agregar al calendario (.ics)</button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const staggerEls = document.querySelectorAll('[data-stagger]');
+
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => io.observe(el));
+
+    const ioStagger = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          ioStagger.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.2 });
+
+    staggerEls.forEach(el => ioStagger.observe(el));
+
+    // ICS generator con timezone America/Bogota (convierte a horario local en cada calendario)
+    const MEET_URL = "https://meet.google.com/jiq-vbmc-rue";
+    const TZID = "America/Bogota";
+
+    function fmtLocal(d){
+      const pad = (n) => String(n).padStart(2,'0');
+      return (
+        d.getFullYear() +
+        pad(d.getMonth()+1) +
+        pad(d.getDate()) +
+        "T" +
+        pad(d.getHours()) +
+        pad(d.getMinutes()) +
+        pad(d.getSeconds())
+      );
+    }
+
+    function fmtUTC(d){
+      const pad = (n) => String(n).padStart(2,'0');
+      return (
+        d.getUTCFullYear() +
+        pad(d.getUTCMonth()+1) +
+        pad(d.getUTCDate()) +
+        "T" +
+        pad(d.getUTCHours()) +
+        pad(d.getUTCMinutes()) +
+        pad(d.getUTCSeconds()) +
+        "Z"
+      );
+    }
+
+    function downloadIcs(){
+      // Evento completo: 26/01/2026 08:00–17:00 Colombia (America/Bogota)
+      const start = new Date(2026, 0, 26, 8, 0, 0);
+      const end   = new Date(2026, 0, 26, 17, 0, 0);
+
+      const uid = `kleerday-20260126-${Math.random().toString(16).slice(2)}@kleerday.local`;
+      const dtstamp = fmtUTC(new Date());
+
+      // VTIMEZONE mínimo para America/Bogota (Colombia no usa DST actualmente)
+      const vtimezone =
+`BEGIN:VTIMEZONE
+TZID:${TZID}
+X-LIC-LOCATION:${TZID}
+BEGIN:STANDARD
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0500
+TZNAME:-05
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE`;
+
+      const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kleer Day//Agenda//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+${vtimezone}
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${dtstamp}
+DTSTART;TZID=${TZID}:${fmtLocal(start)}
+DTEND;TZID=${TZID}:${fmtLocal(end)}
+SUMMARY:Kleer Day
+DESCRIPTION:Kleer Day (08:00–17:00 Colombia). Incluye parte híbrida y presencial. Se graba para quien no pueda asistir. Link Meet: ${MEET_URL}
+LOCATION:${MEET_URL}
+URL:${MEET_URL}
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `KleerDay_2026.ics`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    ["btn-ics", "btn-ics-2", "btn-ics-3"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("click", downloadIcs);
+    });
+  </script>
+</body>
+</html>
+
